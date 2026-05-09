@@ -1,46 +1,67 @@
-# Astro Starter Kit: Basics
+# Anonymous Feedback Wall
 
-```sh
-npm create astro@latest -- --template basics
-```
+A lightweight full-stack web application where users can submit anonymous feedback messages that are displayed publicly.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Live URL
+https://feedback-wall.praisypaulin999.workers.dev
 
-## 🚀 Project Structure
+## GitHub Repository
+https://github.com/praisypaulin/feedback-wall
 
-Inside of your Astro project, you'll see the following folders and files:
+## Technologies Used
+- **Astro** - Frontend framework
+- **TypeScript** - API logic
+- **Supabase (PostgreSQL)** - Database
+- **Cloudflare Workers** - Backend hosting and deployment
+## Architecture
+User → Cloudflare Workers → Astro Frontend → REST API → Supabase PostgreSQL
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+### API Endpoints
+- **POST /api/submit** - Accepts name and message, validates input and stores in Supabase
+- **GET /api/messages** - Retrieves latest feedbacks from Supabase and returns them
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Features
+- Submit anonymous feedback without creating an account
+- View all submitted feedbacks publicly
+- Character counter (300 character limit)
+- Toast notifications for success and error
+- Responsive and modern dark UI design
+- Timestamp on each feedback
+## Setup Steps
 
-## 🧞 Commands
+### Prerequisites
+- Node.js v22 or higher
+- Supabase account
+- Cloudflare account
 
-All commands are run from the root of the project, from a terminal:
+### Installation
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+1. Clone the repository
+git clone https://github.com/praisypaulin/feedback-wall.git
+cd feedback-wall
 
-## 👀 Want to learn more?
+2. Install dependencies
+npm install
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+3. Create a Supabase project and create a table called feedbacks with these columns:
+   - id (int8, primary key)
+   - name (text)
+   - message (text)
+   - created_at (timestamptz)
+
+4. Update Supabase credentials in these files:
+   - src/pages/api/submit.ts
+   - src/pages/api/messages.ts
+
+5. Run the development server
+npm run dev
+
+6. Open browser and go to http://localhost:4321
+
+## Deployment
+The application is deployed on Cloudflare Workers. Any push to the main branch automatically triggers a new deployment.
+
+## Assumptions
+- No authentication required as the feedback is anonymous
+- RLS (Row Level Security) is disabled in Supabase for public access
+- Free tier is used for both Supabase and Cloudflare
